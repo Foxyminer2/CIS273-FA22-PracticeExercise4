@@ -67,7 +67,7 @@ namespace PracticeExercise4
             // then append a new bucket to that list
 
             var newBucket = new Bucket<K, V>(key, value);
-            list.Append(newBucket);
+            list.AddFirst(newBucket);
             count++;
 
             return false;
@@ -97,11 +97,13 @@ namespace PracticeExercise4
 
         }
 
+        // TODO
         public bool ContainsValue(V value)
         {
             throw new NotImplementedException();
         }
 
+        // TODO
         public V Get(K key)
         {
             throw new NotImplementedException();
@@ -122,6 +124,7 @@ namespace PracticeExercise4
             return keys;
         }
 
+        // TODO
         public List<V> GetValues()
         {
             throw new NotImplementedException();

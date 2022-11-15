@@ -22,9 +22,11 @@ namespace PracticeExercise4
         private int count;
         public int Count => count;
 
+        private int count;
         private readonly double MAX_LOAD_FACTOR = 0.6;
-        public double LoadFactor => count / (double)buckets.Length;
 
+        // O(1) - average case
+        // O(n) - worst case
         public bool Add(K key, V value)
         {
 
@@ -59,40 +61,52 @@ namespace PracticeExercise4
                 }
             }
 
-            //if key doesnt exists, add it
+            // if the key doesn't exist, then add it.
             buckets[bucketIndex].Key = key;
             buckets[bucketIndex].Value = value;
             buckets[bucketIndex].State = BucketState.Full;
             count++;
             return false;
+
         }
 
-        // O(?)
+        // O(1) - average case
+        // O(n) - worst case
         public bool ContainsKey(K key)
         {
             throw new NotImplementedException();
         }
 
+        // O(n) - average case
+        // O(n) - worst case
         public bool ContainsValue(V value)
         {
             throw new NotImplementedException();
         }
 
+        // O(1) - average case
+        // O(n) - worst case
         public V Get(K key)
         {
             throw new NotImplementedException();
         }
 
+        // O(n) - average case
+        // O(n) - worst case
         public List<K> GetKeys()
         {
             throw new NotImplementedException();
         }
 
+        // O(n) - average case
+        // O(n) - worst case
         public List<V> GetValues()
         {
             throw new NotImplementedException();
         }
 
+        // O(1) - average case
+        // O(n) - worst case
         public bool Remove(K key)
         {
             throw new NotImplementedException();
@@ -111,10 +125,10 @@ namespace PracticeExercise4
 
             count = 0;
 
-            //rehash all the old/existing buckets into the new array/hashtable
-            foreach (var bucket in oldBuckets)
+            // rehash all the old/existing buckets into the new array/hashtable
+            foreach( var bucket in oldBuckets)
             {
-                if (bucket.State == BucketState.Full)
+                if( bucket.State == BucketState.Full)
                 {
                     Add(bucket.Key, bucket.Value);
                 }
