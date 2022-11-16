@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace PracticeExercise4
 {
@@ -100,13 +101,53 @@ namespace PracticeExercise4
         // TODO
         public bool ContainsValue(V value)
         {
-            throw new NotImplementedException();
+            //if (bucket.State == BucketState.Full && bucket.Value.Equals(value))
+                //{
+                //    return true;
+                //}
+            //int totalSlots = bucketListsArray.Length;
+            //var list = bucketListsArray[];
+            foreach (var list in bucketListsArray)
+            {
+                foreach(var bucket in list)
+                {
+                    if (bucket.Value.Equals(value))
+                    {
+                        return true;
+                    }
+                }
+
+            }
+
+            return false;
+   
         }
 
         // TODO
         public V Get(K key)
         {
-            throw new NotImplementedException();
+            
+
+            if (ContainsKey(key))
+            {
+                int hash = Hash(key);
+
+                // compute the index
+                int index = hash % bucketListsArray.Length;
+
+                //find the list
+                var list = bucketListsArray[index];
+
+                // search the list for the key
+                foreach (var bucket in list)
+                {
+                    if (bucket.Key.Equals(key))
+                    {
+                        return bucket.Value;
+                    }
+                }
+            }
+            throw new KeyNotFoundException();
         }
 
         public List<K> GetKeys()
@@ -127,7 +168,17 @@ namespace PracticeExercise4
         // TODO
         public List<V> GetValues()
         {
-            throw new NotImplementedException();
+            List<V> values = new List<V>();
+
+            foreach (LinkedList<Bucket<K, V>> list in bucketListsArray)
+            {
+                foreach (var bucket in list)
+                {
+                    values.Add(bucket.Value);
+                }
+            }
+
+            return values;
         }
 
         public bool Remove(K key)
@@ -155,6 +206,51 @@ namespace PracticeExercise4
             return false;
 
         }
+
+//             if (ContainsKey(key))
+//            {
+//                int hash = Hash(key);
+
+//        // compute the index
+//        int index = hash % bucketListsArray.Length;
+
+//        //find the list
+//        var list = bucketListsArray[index];
+
+//                // search the list for the key
+//                foreach (var bucket in list)
+//                {
+//                    if (bucket.Key.Equals(key))
+//                    {
+//                        return bucket.Value;
+//                    }
+//}
+//            }
+//            throw new KeyNotFoundException();
+
+        //private void Resize()
+        //{
+        //    var newBuckets = new Bucket<K, V>[2 * bucket.Length];
+        //    var oldBuckets = buckets;
+
+        //    buckets = newBuckets;
+        //    for (int i = 0; i < buckets.Length; i++)
+        //    {
+        //        buckets[i] = new Bucket<K, V>();
+        //    }
+
+        //    count = 0;
+
+        //    // rehash all the old/existing buckets into the new array/hashtable
+        //    foreach (var bucket in oldBuckets)
+        //    {
+        //        if (bucket.State == BucketState.Full)
+        //        {
+        //            Add(bucket.Key, bucket.Value);
+        //        }
+
+        //    }
+        //}
 
 
         private int Hash(K key)

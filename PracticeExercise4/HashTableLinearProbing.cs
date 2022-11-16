@@ -1,4 +1,5 @@
 ﻿using System;
+using PracticeExercise4;
 
 namespace PracticeExercise4
 {
@@ -22,8 +23,8 @@ namespace PracticeExercise4
         private int count;
         public int Count => count;
 
-        private int count;
         private readonly double MAX_LOAD_FACTOR = 0.6;
+        public double LoadFactor => count / (double)buckets.Length;
 
         // O(1) - average case
         // O(n) - worst case
@@ -74,42 +75,138 @@ namespace PracticeExercise4
         // O(n) - worst case
         public bool ContainsKey(K key)
         {
-            throw new NotImplementedException();
+            int hash = Hash(key);
+
+            int startingIndex = hash % buckets.Length;
+            int bucketIndex = startingIndex;
+
+            while (buckets[bucketIndex].State != BucketState.EmptySinceStart)
+            {
+                if (buckets[bucketIndex].State == BucketState.Full && buckets[bucketIndex].Key.Equals(key))
+                {
+                    return true;
+                }
+                bucketIndex = (bucketIndex + 1) % buckets.Length;
+
+                if (bucketIndex == startingIndex)
+                {
+                    return false;
+                }
+            }
+
+            return false;
         }
 
         // O(n) - average case
         // O(n) - worst case
         public bool ContainsValue(V value)
         {
-            throw new NotImplementedException();
-        }
+            foreach (var bucket in buckets)
+            {
+
+                if (bucket.State == BucketState.Full && bucket.Value.Equals(value))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+    }
 
         // O(1) - average case
         // O(n) - worst case
         public V Get(K key)
         {
-            throw new NotImplementedException();
+            int hash = Hash(key);
+
+            int startingIndex = hash % buckets.Length;
+            int bucketIndex = startingIndex;
+
+            while (buckets[bucketIndex].State != BucketState.EmptySinceStart)
+            {
+                if (buckets[bucketIndex].State == BucketState.Full && buckets[bucketIndex].Key.Equals(key))
+                {
+                    return buckets[bucketIndex].Value;
+                }
+                bucketIndex = (bucketIndex + 1) % buckets.Length;
+
+                if (bucketIndex == startingIndex)
+                {
+                    throw new KeyNotFoundException();
+                }
+            }
+
+            throw new KeyNotFoundException();
+
+
         }
 
         // O(n) - average case
         // O(n) - worst case
         public List<K> GetKeys()
         {
-            throw new NotImplementedException();
+            List<K> keys = new List<K>();
+
+            foreach (var bucket in buckets)
+            {
+                if (bucket.State == BucketState.Full)
+                {
+                    keys.Add(bucket.Key);
+                }
+
+            }
+
+            return keys;
         }
 
         // O(n) - average case
         // O(n) - worst case
         public List<V> GetValues()
         {
-            throw new NotImplementedException();
+            List<V> values = new List<V>();
+
+            foreach (var bucket in buckets)
+            {
+                if (bucket.State == BucketState.Full)
+                {
+                    values.Add(bucket.Value);
+                }
+                
+            }
+
+            return values;
+
         }
 
-        // O(1) - average case
-        // O(n) - worst case
-        public bool Remove(K key)
+
+public bool Remove(K key)
         {
-            throw new NotImplementedException();
+            if (ContainsKey(key))
+            {
+                int hash = Hash(key);
+
+                int startingIndex = hash % buckets.Length;
+                int bucketIndex = startingIndex;
+
+                while (buckets[bucketIndex].State != BucketState.EmptySinceStart)
+                {
+                    if (buckets[bucketIndex].State == BucketState.Full && buckets[bucketIndex].Key.Equals(key))
+                    {
+                        buckets[bucketIndex].Clear();
+                        count--;
+                        return true;
+                    }
+                    bucketIndex = (bucketIndex + 1) % buckets.Length;
+
+                    if (bucketIndex == startingIndex)
+                    {
+                        return false;
+                    }
+                }
+
+                return false;
+            }
+            return false;
         }
 
         private void Resize()
@@ -132,6 +229,7 @@ namespace PracticeExercise4
                 {
                     Add(bucket.Key, bucket.Value);
                 }
+
             }
         }
 
